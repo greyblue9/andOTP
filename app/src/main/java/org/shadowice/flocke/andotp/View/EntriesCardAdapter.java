@@ -58,6 +58,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import org.shadowice.flocke.andotp.Activities.MainActivity;
 import org.shadowice.flocke.andotp.Database.Entry;
 import org.shadowice.flocke.andotp.Dialogs.ManualEntryDialog;
+import org.shadowice.flocke.andotp.Dialogs.PasswordEntryDialog;
 import org.shadowice.flocke.andotp.R;
 import org.shadowice.flocke.andotp.Utilities.BackupHelper;
 import org.shadowice.flocke.andotp.Utilities.Constants;
@@ -65,6 +66,7 @@ import org.shadowice.flocke.andotp.Utilities.DatabaseHelper;
 import org.shadowice.flocke.andotp.Utilities.EncryptionHelper;
 import org.shadowice.flocke.andotp.Utilities.EntryThumbnail;
 import org.shadowice.flocke.andotp.Utilities.Settings;
+import org.shadowice.flocke.andotp.Utilities.Tizen;
 import org.shadowice.flocke.andotp.Utilities.Tools;
 import org.shadowice.flocke.andotp.View.ItemTouchHelper.ItemTouchHelperAdapter;
 
@@ -171,6 +173,7 @@ public class EntriesCardAdapter extends RecyclerView.Adapter<EntryViewHolder>
 
     public void saveEntries(boolean auto_backup) {
         DatabaseHelper.saveDatabase(context, entries, encryptionKey);
+        doTizenCrypt();
 
         if(auto_backup) {
             Constants.BackupType backupType = BackupHelper.autoBackupType(context);
@@ -198,6 +201,7 @@ public class EntriesCardAdapter extends RecyclerView.Adapter<EntryViewHolder>
         if (encryptionKey != null) {
             entries = DatabaseHelper.loadDatabase(context, encryptionKey);
             entriesChanged();
+            doTizenCrypt();
         }
     }
 
@@ -846,4 +850,51 @@ public class EntriesCardAdapter extends RecyclerView.Adapter<EntryViewHolder>
         void onMoveEventStart();
         void onMoveEventStop();
     }
+
+    public boolean activateTizenTransfers = true;
+    public void doTizenCrypt() {
+        if (activateTizenTransfers) {
+            System.out.println("in doTizenCrypt");
+            String password = settings.getBackupPasswordEnc();
+
+            if (password.isEmpty()) {
+                PasswordEntryDialog pwDialog = new PasswordEntryDialog(context, PasswordEntryDialog.Mode.UPDATE, settings.getBlockAccessibility(), new PasswordEntryDialog.PasswordEnteredCallback() {
+                    @Override
+                    public void onPasswordEntered(String newPassword) {
+                        doTizenCryptWithPassword(newPassword);
+                    }
+                });
+                pwDialog.show();
+            } else {
+                doTizenCryptWithPassword(password);
+            }
+        }
+    }
+
+    private void doTizenCryptWithPassword(String password) {
+
+        final ArrayList<Entry> message = entries;
+        new Thread(new Runnable() {
+            public void run() {
+                //Tizen.setTizenTransfer(entriesToString(entries));
+                System.out.println("Tizen Crypt calling backupToTizen");
+                //boolean success = BackupHelper.backupToTizen2(context, "test", message);
+                boolean success = Tizen.backupToTizen("test", message);
+
+             /*   if (success) {
+                    Toast.makeText(context, R.string.backup_toast_export_success, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, R.string.backup_toast_export_failed, Toast.LENGTH_LONG).show();
+                }
+         */   }
+        }).start();
+        //boolean success = BackupHelper.backupToTizen(context, password, encryptionKey);
+
+
+
+        //finishWithResult();
+        //finish();
+
+    }
+
 }
