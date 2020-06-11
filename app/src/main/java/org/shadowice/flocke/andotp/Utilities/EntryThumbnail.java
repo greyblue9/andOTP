@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2017-2018 Jakob Nixdorf
- * Copyright (C) 2017-2018 Richy HBM
+ * Copyright (C) 2017-2020 Jakob Nixdorf
+ * Copyright (C) 2017-2020 Richy HBM
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -276,6 +276,7 @@ public class EntryThumbnail {
         Wallet(R.drawable.thumb_wallet),
         Wargaming(R.drawable.thumb_wargaming),
         Wasabi(R.drawable.thumb_wasabi),
+        Weclapp(R.drawable.thumb_weclapp),
         WebDe(R.drawable.thumb_web_de),
         Wikimedia(R.drawable.thumb_wikimedia),
         Wordpress(R.drawable.thumb_wordpress),
