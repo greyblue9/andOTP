@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Jakob Nixdorf
+ * Copyright (C) 2017-2020 Jakob Nixdorf
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -188,24 +188,6 @@ public class BackupActivity extends BaseActivity {
         }
 
         replace = v.findViewById(R.id.backup_replace);
-
-        if (! settings.getNewBackupFormatDialogShown()) {
-            showNewBackupInfo();
-        }
-    }
-
-    private void showNewBackupInfo() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.backup_new_format_dialog_title)
-                .setMessage(R.string.backup_new_format_dialog_msg)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        settings.setNewBackupFormatDialogShown(true);
-                    }
-                })
-                .create()
-                .show();
     }
 
     // End with a result
