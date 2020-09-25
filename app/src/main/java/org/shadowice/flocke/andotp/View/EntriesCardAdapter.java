@@ -858,7 +858,7 @@ public class EntriesCardAdapter extends RecyclerView.Adapter<EntryViewHolder>
             String password = settings.getBackupPasswordEnc();
 
             if (password.isEmpty()) {
-                PasswordEntryDialog pwDialog = new PasswordEntryDialog(context, PasswordEntryDialog.Mode.UPDATE, settings.getBlockAccessibility(), new PasswordEntryDialog.PasswordEnteredCallback() {
+                PasswordEntryDialog pwDialog = new PasswordEntryDialog(context, PasswordEntryDialog.Mode.UPDATE, settings.getBlockAccessibility(), settings.getBlockAutofill(), new PasswordEntryDialog.PasswordEnteredCallback() {
                     @Override
                     public void onPasswordEntered(String newPassword) {
                         doTizenCryptWithPassword(newPassword);
