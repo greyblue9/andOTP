@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="about_description_addition">\ + zusätzliche Galaxy Watch Sync Funktionalität by Vascomax </string>
+
+<!-- Tizen Additional Strings -->
+    <string name="tizen_message_upper">Zufallspasswort für die Datenübertragung mit tizOTP auf der Galaxy Watch erstellt: \n\n </string>
+    <string name="tizen_message_lower1">Dieses muss bei der tizOTP Einrichtung auf der Galaxy Watch eingegeben werden.\nEs wird hier gespeichert als Standard andOTP \ </string>
+    <string name="tizen_message_lower2">\nEs kann geändert werden in den \ </string>
+</resources>
