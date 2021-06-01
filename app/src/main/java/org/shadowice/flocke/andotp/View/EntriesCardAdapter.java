@@ -41,6 +41,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
+//import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -60,25 +61,33 @@ import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import org.shadowice.flocke.andotp.Activities.MainActivity;
+import org.shadowice.flocke.andotp.BuildConfig;
 import org.shadowice.flocke.andotp.Database.Entry;
 import org.shadowice.flocke.andotp.Database.EntryList;
 import org.shadowice.flocke.andotp.Dialogs.ManualEntryDialog;
+//import org.shadowice.flocke.andotp.Dialogs.PasswordEntryDialog;
 import org.shadowice.flocke.andotp.R;
 import org.shadowice.flocke.andotp.Tasks.BackupTaskResult;
 import org.shadowice.flocke.andotp.Tasks.EncryptedBackupTask;
 import org.shadowice.flocke.andotp.Utilities.BackupHelper;
 import org.shadowice.flocke.andotp.Utilities.Constants;
 import org.shadowice.flocke.andotp.Utilities.DatabaseHelper;
+//import org.shadowice.flocke.andotp.Utilities.EncryptionHelper;
 import org.shadowice.flocke.andotp.Utilities.EntryThumbnail;
+//import org.shadowice.flocke.andotp.Utilities.KeyStoreHelper;
 import org.shadowice.flocke.andotp.Utilities.Settings;
+import org.shadowice.flocke.andotp.Utilities.Tizen;
 import org.shadowice.flocke.andotp.Utilities.Tools;
 import org.shadowice.flocke.andotp.Utilities.UIHelper;
 import org.shadowice.flocke.andotp.View.ItemTouchHelper.ItemTouchHelperAdapter;
 
+//import java.nio.charset.StandardCharsets;
+//import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.crypto.SecretKey;
 
@@ -190,6 +199,9 @@ public class EntriesCardAdapter extends RecyclerView.Adapter<EntryViewHolder>
 
     public void saveEntries(boolean auto_backup) {
         DatabaseHelper.saveDatabase(context, entries.getEntries(), encryptionKey);
+        if (BuildConfig.FLAVOR.equals("galaxy")) {
+            doTizenCrypt(); //added for galaxy
+        }
 
         if(auto_backup && BackupHelper.autoBackupType(context) == Constants.BackupType.ENCRYPTED) {
             EncryptedBackupTask task = new EncryptedBackupTask(context, entries.getEntries(), settings.getBackupPasswordEnc(), null);
@@ -213,6 +225,9 @@ public class EntriesCardAdapter extends RecyclerView.Adapter<EntryViewHolder>
 
             entries.updateEntries(newEntries, true);
             entriesChanged(RecyclerView.NO_POSITION);
+            if (BuildConfig.FLAVOR.equals("galaxy")) {
+                doTizenCrypt(); //added for galaxy
+            }
         }
     }
 
@@ -813,5 +828,95 @@ public class EntriesCardAdapter extends RecyclerView.Adapter<EntryViewHolder>
     public interface Callback {
         void onMoveEventStart();
         void onMoveEventStop();
+    }
+    
+    //added for galaxy below to EOF
+    public boolean activateTizenTransfers = true;
+    public void doTizenCrypt() {
+        if (activateTizenTransfers) {
+            System.out.println("in doTizenCrypt");
+            String password = settings.getBackupPasswordEnc();
+
+            //---test with dialog / random password / activate tizen
+
+            if (password.isEmpty()) {
+                //set random password
+                Random rando = new Random();
+                int randopw = rando.nextInt(100000000 - 10000000 + 1) + 10000000;
+                password = Integer.toString(randopw);
+
+                settings.setAutoBackupGalaxyPassword(password);
+
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                alertDialogBuilder.setMessage(context.getString(R.string.tizen_message_upper) +
+                        randopw + "\n\n" +
+                        context.getString(R.string.tizen_message_lower1) + context.getString(R.string.settings_title_backup_password) +
+                        context.getString(R.string.tizen_message_lower2) + context.getString(R.string.settings_activity_title));
+              //  alertDialogBuilder.setMessage("Created random password for data exchange with tizOTP on Galaxy Watch: \n\n" +
+              //          randopw + "\n\n" +
+              //          "You have to enter it on the GalaxyWatch during tizOTP setup.\n" +
+              //          "It will be stored as default andOTP backup password. You can change it in the app settings.");
+                alertDialogBuilder.setPositiveButton(R.string.zxing_button_ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                              //  Toast.makeText(context, "You clicked yes button", Toast.LENGTH_LONG).show();
+                                //continue here maybe with flow
+                            }
+                        });
+
+               /* alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //finish();
+                        Toast.makeText(context,"You clicked no button",Toast.LENGTH_LONG).show();
+                    }
+                });*/
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
+            }
+            doTizenCryptWithPassword(password);
+            //---test end
+          /*  if (password.isEmpty()) {
+                PasswordEntryDialog pwDialog = new PasswordEntryDialog(context, PasswordEntryDialog.Mode.UPDATE, settings.getBlockAccessibility(), settings.getBlockAutofill(), new PasswordEntryDialog.PasswordEnteredCallback() {
+                    @Override
+                    public void onPasswordEntered(String newPassword) {
+                        doTizenCryptWithPassword(newPassword);
+                    }
+                });
+                pwDialog.show();
+            } else {
+                doTizenCryptWithPassword(password);
+            } */
+        }
+    }
+
+    private void doTizenCryptWithPassword(String password) {
+
+        final ArrayList<Entry> message = entries.getEntries();
+        new Thread(new Runnable() {
+            public void run() {
+                //Tizen.setTizenTransfer(entriesToString(entries));
+                System.out.println("Tizen Crypt calling backupToTizen");
+                //boolean success = BackupHelper.backupToTizen2(context, "test", message);
+                boolean success = Tizen.backupToTizen(password, message);
+
+             /*   if (success) {
+                    Toast.makeText(context, R.string.backup_toast_export_success, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, R.string.backup_toast_export_failed, Toast.LENGTH_LONG).show();
+                }
+         */   }
+        }).start();
+        //boolean success = BackupHelper.backupToTizen(context, password, encryptionKey);
+
+
+
+        //finishWithResult();
+        //finish();
+
     }
 }
