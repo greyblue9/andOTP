@@ -2,6 +2,7 @@
 
 #### v0.9.0
 
+ * New feature: Added Galaxy Store Flavor including Options to sync to a Tizen Galaxy Watch (No Cloud involved via SAP and Bluetooth)
  * New feature: Option to focus search on start (Issue #654,PR #658 by @mchllngr)
  * New feature: Option to disable Android sync (Google Drive backup) during initial setup (Issue #620, PR #622 by @RichyHBM)
  * New feature: Option to automatically unlock the app after the credentials have been auto-filled (PR #657 by @mchllngr)
