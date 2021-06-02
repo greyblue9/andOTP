@@ -83,8 +83,8 @@ Check out [this](https://github.com/andOTP/andOTP/wiki/Migration) wiki page to l
 
 ## Downloads:
 
-Download andOTP via Samsung Galaxy App store for this forked version with Galaxy Watch support. (Link tbd) 
-Standard version below (no support sync with Galaxy Watch):
+Download andOTP via Samsung Galaxy App store for this forked version with Galaxy Watch support. (Link tbd)  
+Standard version below (no support sync with Galaxy Watch):  
 [<img height=80 alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" />](https://play.google.com/store/apps/details?id=org.shadowice.flocke.andotp)
 [<img height=80 alt="Get it on F-Droid" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" />](https://f-droid.org/packages/org.shadowice.flocke.andotp/)
 [<img height=80 alt="Get it on GitHub" src="https://raw.githubusercontent.com/flocke/andOTP/master/assets/badges/get-it-on-github.png" />](https://github.com/andOTP/andOTP/releases)
