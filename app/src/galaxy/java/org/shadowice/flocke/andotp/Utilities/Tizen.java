@@ -24,7 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 
 
 import javax.crypto.SecretKey;
@@ -70,7 +69,7 @@ public class Tizen extends SAAgentV2 {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mContext, "Connection accepted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Watch Connection Accepted", Toast.LENGTH_SHORT).show();
                 }
             });
             acceptServiceConnectionRequest(peerAgent);
@@ -139,7 +138,7 @@ public class Tizen extends SAAgentV2 {
             String receivedCommand= new String(data);
             Log.e(TAG, receivedCommand);
             if (!receivedCommand.equals("Hello Dududu! Gimme some s**t" )) {
-                Log.e(TAG, "dropping query");
+            //debug    Log.e(TAG, "dropping query");
                 return;
             }
             Calendar calendar = new GregorianCalendar();
@@ -147,7 +146,7 @@ public class Tizen extends SAAgentV2 {
             String timeStr = " " + dateFormat.format(calendar.getTime());
             //String strToUpdateUI = new String(data);
             String strToUpdateUI = getTizenString(); // getTizenTransfer();
-            System.out.println(strToUpdateUI);
+        //debug    System.out.println(strToUpdateUI);
             final String message = strToUpdateUI;
             ///final String message = strToUpdateUI.concat(timeStr);
 
@@ -170,7 +169,7 @@ public class Tizen extends SAAgentV2 {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mContext, "Connection Terminated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Watch Connection Terminated", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -190,37 +189,14 @@ public class Tizen extends SAAgentV2 {
 
     public static String transferstring;
 
-    //public static byte[] transferdata;
- /*   public static void setTizenTransfer(String datastring) {
-        transferstring = datastring;
-        System.out.println("Tizen set called. System out ");
-        Log.e(TAG, "Tizen set called");
-    }*/
     public static void setTizenData(byte[] databytes) {
-    /*    String datastring = null;
-        try {
-            datastring = new String(databytes, "UTF-8");
-        } catch (IOException e) {
-            Log.e(TAG, "Exception"+e);
-        }*/
         String hexdata = bytesToHex(databytes);
-        //System.out.println(hexdata);
-
-        //transferdata = databytes;
         transferstring = hexdata;
-        //System.out.println("Tizen set databytes called. System out ");
-        Log.e(TAG, "Tizen set called bytes: "+transferstring);
+    //debug    Log.e(TAG, "Tizen set called bytes: "+transferstring);
     }
-  /*  public static byte[] getTizenData() {
-        Log.e(TAG, "Tizen get Data called");
-        if (transferdata==null) {
-            transferdata = "No Datab".getBytes();
-        }
-        System.out.println(transferdata.toString());
-        return transferdata;
-    }
-*/    public static String getTizenString() {
-        Log.e(TAG, "Tizen get called");
+
+    public static String getTizenString() {
+    //debug    Log.e(TAG, "Tizen get called");
         if (transferstring==null) {
             transferstring = "No Data";
         }
@@ -229,7 +205,6 @@ public class Tizen extends SAAgentV2 {
 
     public static boolean backupToTizen(String password, ArrayList<Entry> entries)
     {
-        //ArrayList<Entry> entries = DatabaseHelper.loadDatabase(context, encryptionKey);
         String plain = DatabaseHelper.entriesToString(entries);
 
         try {
@@ -246,10 +221,9 @@ public class Tizen extends SAAgentV2 {
             System.arraycopy(salt, 0, data, Constants.INT_LENGTH, Constants.ENCRYPTION_IV_LENGTH);
             System.arraycopy(encrypted, 0, data, Constants.INT_LENGTH + Constants.ENCRYPTION_IV_LENGTH, encrypted.length);
 
-            //StorageAccessHelper.saveFile(context, uri, data);
-            System.out.println(data.toString());
+    //debug        System.out.println(data.toString());
             Tizen.setTizenData(data);
-            System.out.println("Set Tizen Data");
+    //debug        System.out.println("Set Tizen Data");
         } catch (Exception e) {
             e.printStackTrace();
             return false;
