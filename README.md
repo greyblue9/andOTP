@@ -159,6 +159,7 @@ Let's be realistic here... no one does it anyway.
 
 ## License:
 ```
+Copyright (C) 2021 Vascomax
 Copyright (C) 2017-2020 Jakob Nixdorf <andotp@shadowice.org>
 Copyright (C) 2015 Bruno Bierbaumer
 
