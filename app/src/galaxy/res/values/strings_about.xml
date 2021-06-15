@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about_description_addition">\ + Galaxy Watch sync functionality added by Vascomax </string>
+    <string name="about_description_addition">\ + Galaxy Watch® sync functionality added by Vascomax </string>
 
     <string name="about_name_author0" translatable="false">Vascomax</string>
-    <string name="about_label_galaxy_developer">Galaxy/Tizen Mod Developer</string>
+    <string name="about_label_galaxy_developer">Watch Mod Developer</string>
 <!-- Tizen Additional Strings -->
-    <string name="tizen_message_upper">Created random password for data exchange with tizOTP on Galaxy Watch: \n\n </string>
-    <string name="tizen_message_lower1">You have to enter it on the GalaxyWatch during tizOTP setup.\nIt will be stored here as default andOTP \ </string>
+    <string name="tizen_message_upper">Created random password for data exchange with tizOTP on Galaxy Watch®: \n\n </string>
+    <string name="tizen_message_lower1">You have to enter it on the Galaxy Watch® during tizOTP setup.\nIt will be stored here as default andOTP \ </string>
     <string name="tizen_message_lower2">\nYou can change it in the \ </string>
+    <string name="about_galaxy_disclaimer">Samsung Galaxy Watch® is a registered trademark of the Samsung Electronics Co., Ltd.</string>
 </resources>
