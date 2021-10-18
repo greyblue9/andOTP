@@ -68,6 +68,7 @@ import org.shadowice.flocke.andotp.R;
 import org.shadowice.flocke.andotp.Tasks.BackupTaskResult;
 import org.shadowice.flocke.andotp.Tasks.EncryptedBackupTask;
 import org.shadowice.flocke.andotp.Utilities.BackupHelper;
+import org.shadowice.flocke.andotp.Utilities.BluetoothChat;
 import org.shadowice.flocke.andotp.Utilities.Constants;
 import org.shadowice.flocke.andotp.Utilities.DatabaseHelper;
 import org.shadowice.flocke.andotp.Utilities.EntryThumbnail;
@@ -828,7 +829,7 @@ public class EntriesCardAdapter extends RecyclerView.Adapter<EntryViewHolder>
     public boolean activateTizenTransfers = true;
     public void doTizenCrypt() {
         if (activateTizenTransfers) {
-            System.out.println("in doTizenCrypt");
+//debug            System.out.println("in doTizenCrypt");
             String password = settings.getBackupPasswordEnc();
 
             //--- dialog / random password / activate tizen
@@ -844,13 +845,28 @@ public class EntriesCardAdapter extends RecyclerView.Adapter<EntryViewHolder>
                 alertDialogBuilder.setMessage(context.getString(R.string.tizen_message_upper) +
                         randopw + "\n\n" +
                         context.getString(R.string.tizen_message_lower1) + context.getString(R.string.settings_title_backup_password) +
-                        context.getString(R.string.tizen_message_lower2) + context.getString(R.string.settings_activity_title));
-                alertDialogBuilder.setPositiveButton(R.string.zxing_button_ok,
+                        context.getString(R.string.tizen_message_lower2) + context.getString(R.string.settings_activity_title)+ "\n" + context.getString(R.string.tizen_message_lower3));
+                alertDialogBuilder.setPositiveButton(R.string.button_tizen,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                               //  Toast.makeText(context, "You clicked OK button", Toast.LENGTH_LONG).show();
                                 //do nothing yet, just close dialog
+                                //set wearos flag to false.. no bluetooth init
+                                settings.setWearOsBluetooth(false);
+                            }
+                        });
+                alertDialogBuilder.setNeutralButton(R.string.button_wearos,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                //  Toast.makeText(context, "You clicked OK button", Toast.LENGTH_LONG).show();
+                                //set the wearos flag
+                                settings.setWearOsBluetooth(true);
+                                BluetoothChat BC = new BluetoothChat();
+                                BC.onCreate(context);
+                                BC.onStart(context);
+                                BC.onResume();
                             }
                         });
 

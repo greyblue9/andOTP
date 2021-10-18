@@ -699,4 +699,13 @@ public class Settings {
             e.printStackTrace();
         }
     }
+
+    // added entry and method to set / get GW4 WearOs Bluetooth Sync Mode
+    public void setWearOsBluetooth (Boolean WearOS) {
+        setBoolean(R.string.settings_key_galaxy_wearos_sync, WearOS);
+    }
+
+    public boolean getWearOsBluetooth () {
+        return getBoolean(R.string.settings_key_galaxy_wearos_sync, false);
+    }
 }

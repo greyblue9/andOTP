@@ -8,5 +8,14 @@
     <string name="tizen_message_upper">Created random password for data exchange with tizOTP on Galaxy Watch®: \n\n </string>
     <string name="tizen_message_lower1">You have to enter it on the Galaxy Watch® during tizOTP setup.\nIt will be stored here as default andOTP \ </string>
     <string name="tizen_message_lower2">\nYou can change it in the \ </string>
+    <string name="tizen_message_lower3">\nPlease choose your watch OS below (Note: Only GW4 uses WearOS) </string>
+    <string name="button_tizen">Tizen</string>
+    <string name="button_wearos">Wear OS</string>
     <string name="about_galaxy_disclaimer">Samsung Galaxy Watch® is a registered trademark of the Samsung Electronics Co., Ltd.</string>
+    <string name="settings_title_wearos">Sync to WearOS watch</string>
+    <string name="settings_desc_wearos">Provide additional encrypted 1-way bluetooth updates to WearOS watch (e.g. GW4). Effective only after app restart.</string>
+
+    <!-- Added for Galaxy WearOs mod (should go in settings.xml) -->
+    <string name="settings_key_galaxy_wearos_sync" translatable="false">pref_galaxy_wearos_sync</string>
+
 </resources>

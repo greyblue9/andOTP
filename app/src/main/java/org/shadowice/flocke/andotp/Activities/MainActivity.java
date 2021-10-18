@@ -68,9 +68,11 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import org.shadowice.flocke.andotp.BuildConfig;
 import org.shadowice.flocke.andotp.Database.Entry;
 import org.shadowice.flocke.andotp.Dialogs.HideableDialog;
 import org.shadowice.flocke.andotp.R;
+import org.shadowice.flocke.andotp.Utilities.BluetoothChat;
 import org.shadowice.flocke.andotp.Utilities.Constants;
 import org.shadowice.flocke.andotp.Utilities.EncryptionHelper;
 import org.shadowice.flocke.andotp.Utilities.KeyStoreHelper;
@@ -124,6 +126,9 @@ public class MainActivity extends BaseActivity
     private CountDownTimer countDownTimer;
     private ProgressBar progressBar;
     private TextView emptyListView;
+
+    //Galaxy WearOS Bluetooth
+    private final BluetoothChat BC = new BluetoothChat();
 
     // QR code scanning
     private void scanQRCode(){
@@ -371,6 +376,14 @@ public class MainActivity extends BaseActivity
 
         if (settings.isFocusSearchOnStartEnabled())
             focusSearchMenu();
+
+        //Galaxy WearOS Bluetooth
+        if (BuildConfig.FLAVOR.equals("galaxy")) {
+            if (settings.getWearOsBluetooth()) {
+                BC.onCreate(getApplicationContext());
+                BC.onStart(getApplicationContext());
+            }
+        }
     }
 
     private void checkIntent() {
@@ -453,6 +466,13 @@ public class MainActivity extends BaseActivity
             cardList.setVisibility(View.VISIBLE);
 
         startUpdater();
+
+        //Galaxy WearOS Bluetooth
+        if (BuildConfig.FLAVOR.equals("galaxy")) {
+            if (settings.getWearOsBluetooth()) {
+                BC.onResume();
+            }
+        }
     }
 
     @Override

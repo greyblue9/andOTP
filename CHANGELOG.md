@@ -1,5 +1,9 @@
 # Changelog
 
+#### v0.9.0.1B
+
+ * New feature: Added capability to sync additionally to a WearOS Galaxy Watch 4
+
 #### v0.9.0.1
 
  * Bugfix: Fix crash when using the tags drawer (Issue #856)
