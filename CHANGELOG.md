@@ -1,5 +1,10 @@
 # Changelog
 
+#### v0.9.0.1C
+
+ * Update: SDK 31, Gradle 6.5->7.5 Gradle Plugin 4.1.3->7.2.1, media 1.2.0->1.6.0, appcompat 1.2.0->1.4.2, recyclerview 1.2.0->1.2.1, constraintlayout 2.0.4->2.1.4, material: 1.3.0->1.6.1, espresso-core 3.3.0->3.4.0, lifecycle-version 2.3.1(2.4.0)->2.5.0
+ * Thumbnails: Included pending additional-icons 11 and 12 from upstream (thanks ziegenberg)
+
 #### v0.9.0.1B
 
  * New feature: Added capability to sync additionally to a WearOS Galaxy Watch 4
