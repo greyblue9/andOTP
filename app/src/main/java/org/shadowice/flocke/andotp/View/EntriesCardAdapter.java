@@ -863,10 +863,10 @@ public class EntriesCardAdapter extends RecyclerView.Adapter<EntryViewHolder>
                                 //  Toast.makeText(context, "You clicked OK button", Toast.LENGTH_LONG).show();
                                 //set the wearos flag
                                 settings.setWearOsBluetooth(true);
-                                BluetoothChat BC = new BluetoothChat();
-                                BC.onCreate(context);
-                                BC.onStart(context);
-                                BC.onResume();
+                                //BluetoothChat BC = new BluetoothChat();
+                                //BC.onCreate(context);
+                                //BC.onStart(context);
+                                //BC.onResume();
                             }
                         });
 
