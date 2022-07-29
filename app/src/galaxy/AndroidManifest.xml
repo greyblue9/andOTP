@@ -120,5 +120,6 @@
     <!-- Required on Android 11+ for andOTP to be able to select a PGP provider -->
     <queries>
         <package android:name="org.sufficientlysecure.keychain" />
+        <package android:name="com.samsung.accessory" />
     </queries>
 </manifest>
