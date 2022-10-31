@@ -1,5 +1,9 @@
 # Changelog
 
+#### v0.9.0.1F
+
+ * Enhancement: Added icon issue #10
+
 #### v0.9.0.1E
 
  * Bugfix: Make Accessory Service visible for Android >=11
