@@ -121,6 +121,7 @@ public class EntryThumbnail {
         Bittrex(R.drawable.thumb_bittrex),
         Bitwala(R.drawable.thumb_bitwala),
         Bitwarden(R.drawable.thumb_bitwarden),
+        Blacknight(R.drawable.thumb_blacknight),
         BlockchainInfo(R.drawable.thumb_blockchain_info),
         Boxcryptor(R.drawable.thumb_boxcryptor),
         Box(R.drawable.thumb_box),
