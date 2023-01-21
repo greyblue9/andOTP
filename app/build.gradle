@@ -28,9 +28,6 @@ android {
             }
         }
     }
-    lintOptions {
-        abortOnError false
-    }
     buildFeatures {
         dataBinding = true
     }

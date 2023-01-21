@@ -86,17 +86,12 @@ import org.shadowice.flocke.andotp.Utilities.ScanQRCodeFromFile;
 import org.shadowice.flocke.andotp.Utilities.TokenCalculator;
 import org.shadowice.flocke.andotp.View.EntriesCardAdapter;
 import org.shadowice.flocke.andotp.View.ItemTouchHelper.SimpleItemTouchHelperCallback;
-import org.shadowice.flocke.andotp.Dialogs.ManualEntryDialog;
 import org.shadowice.flocke.andotp.View.TagsAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.crypto.SecretKey;
-
-import static org.shadowice.flocke.andotp.Utilities.Constants.AuthMethod;
-import static org.shadowice.flocke.andotp.Utilities.Constants.EncryptionType;
-import static org.shadowice.flocke.andotp.Utilities.Constants.SortMode;
 
 public class MainActivity extends BaseActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -552,7 +547,7 @@ public class MainActivity extends BaseActivity
         super.onSaveInstanceState(outState);
         outState.putString("filterString", filterString);
 
-        if (cacheEncKey) {
+        if (cacheEncKey && adapter.getEncryptionKey() != null) {
             outState.putByteArray("encKey", adapter.getEncryptionKey().getEncoded());
             cacheEncKey = false;
         }
@@ -787,7 +782,9 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.action_backup) {
             Intent backupIntent = new Intent(this, BackupActivity.class);
-            backupIntent.putExtra(Constants.EXTRA_BACKUP_ENCRYPTION_KEY, adapter.getEncryptionKey().getEncoded());
+            if (adapter.getEncryptionKey() != null) {
+                backupIntent.putExtra(Constants.EXTRA_BACKUP_ENCRYPTION_KEY, adapter.getEncryptionKey().getEncoded());
+            }
             startActivityForResult(backupIntent, Constants.INTENT_MAIN_BACKUP);
         } else if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
