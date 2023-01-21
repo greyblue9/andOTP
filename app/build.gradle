@@ -5,7 +5,7 @@ android {
     buildToolsVersion '31.0.0'
 
     defaultConfig {
-        applicationId "org.shadowice.flocke.tizandotp"
+        applicationId "org.shadowice.flocke.andotp"
         minSdkVersion 22
         targetSdkVersion 31
         versionCode 43
@@ -53,6 +53,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'org.shadowice.flocke.andotp'
 }
 
 dependencies {
