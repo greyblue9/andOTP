@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion '31.0.0'
+    compileSdkVersion 32
+    buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "org.shadowice.flocke.andotp"
         minSdkVersion 22
-        targetSdkVersion 31
-        versionCode 43
-        versionName "0.9.0.1F"
+        targetSdkVersion 32
+        versionCode 39
+        versionName "0.9.0.1"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,10 +40,6 @@ android {
             dimension = 'market'
             versionNameSuffix = "-play"
         }
-        galaxy {
-            dimension 'market'
-            versionNameSuffix '-galaxy'
-        }
     }
     compileOptions {
         // Flag to enable support for the new language APIs
@@ -54,22 +50,23 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     namespace 'org.shadowice.flocke.andotp'
+    lint {
+        abortOnError false
+    }
 }
 
 dependencies {
-    implementation files('libs/accessory-v2.6.1.jar')
-    implementation files('libs/sdk-v1.0.0.jar')
-    def lifecycle_version = "2.5.0"
+    // def lifecycle_version = "2.5.1"
 
-    implementation 'androidx.media:media:1.6.0'
+    implementation 'androidx.media:media:1.6.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "androidx.lifecycle:lifecycle-process:${lifecycle_version}"
-    implementation "androidx.lifecycle:lifecycle-common-java8:${lifecycle_version}"
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation "androidx.lifecycle:lifecycle-process:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.5.1"
+    implementation 'com.google.android.material:material:1.7.0'
 
     //noinspection GradleDependency - because they messed up their version numbering
     implementation "commons-codec:commons-codec:1.15"
@@ -83,6 +80,5 @@ dependencies {
     implementation "com.mikepenz:aboutlibraries:6.2.3" // Supporting a newer version will need some work
 
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5' //D8/R8 error with 1.2.0
-
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.0'
 }

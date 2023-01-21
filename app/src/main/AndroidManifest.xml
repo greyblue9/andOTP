@@ -19,11 +19,9 @@
         <!-- TODO: Rework configuration changes to properly recreate the activity -->
         <activity
             android:name=".Activities.MainActivity"
-            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|keyboard"
-            >
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|keyboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -68,7 +66,6 @@
         <activity android:name=".Activities.SecureCaptureActivity" />
         <activity
             android:name=".Activities.PanicResponderActivity"
-            android:exported="true"
             android:launchMode="singleInstance"
             android:noHistory="true"
             android:theme="@android:style/Theme.NoDisplay">
@@ -78,13 +75,13 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".Receivers.PlainTextBackupBroadcastReceiver" android:exported="true">
+        <receiver android:name=".Receivers.PlainTextBackupBroadcastReceiver">
             <intent-filter>
                 <action android:name="org.shadowice.flocke.andotp.broadcast.PLAIN_TEXT_BACKUP" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".Receivers.EncryptedBackupBroadcastReceiver" android:exported="true">
+        <receiver android:name=".Receivers.EncryptedBackupBroadcastReceiver">
             <intent-filter>
                 <action android:name="org.shadowice.flocke.andotp.broadcast.ENCRYPTED_BACKUP" />
             </intent-filter>

@@ -23,16 +23,13 @@
 
 package org.shadowice.flocke.andotp.Activities;
 
-import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -41,8 +38,6 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -73,11 +68,9 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.leinardi.android.speeddial.SpeedDialView;
 
-import org.shadowice.flocke.andotp.BuildConfig;
 import org.shadowice.flocke.andotp.Database.Entry;
 import org.shadowice.flocke.andotp.Dialogs.HideableDialog;
 import org.shadowice.flocke.andotp.R;
-import org.shadowice.flocke.andotp.Utilities.BluetoothChat;
 import org.shadowice.flocke.andotp.Utilities.Constants;
 import org.shadowice.flocke.andotp.Utilities.EncryptionHelper;
 import org.shadowice.flocke.andotp.Utilities.KeyStoreHelper;
@@ -86,12 +79,17 @@ import org.shadowice.flocke.andotp.Utilities.ScanQRCodeFromFile;
 import org.shadowice.flocke.andotp.Utilities.TokenCalculator;
 import org.shadowice.flocke.andotp.View.EntriesCardAdapter;
 import org.shadowice.flocke.andotp.View.ItemTouchHelper.SimpleItemTouchHelperCallback;
+import org.shadowice.flocke.andotp.Dialogs.ManualEntryDialog;
 import org.shadowice.flocke.andotp.View.TagsAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.crypto.SecretKey;
+
+import static org.shadowice.flocke.andotp.Utilities.Constants.AuthMethod;
+import static org.shadowice.flocke.andotp.Utilities.Constants.EncryptionType;
+import static org.shadowice.flocke.andotp.Utilities.Constants.SortMode;
 
 public class MainActivity extends BaseActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -126,54 +124,6 @@ public class MainActivity extends BaseActivity
     private CountDownTimer countDownTimer;
     private ProgressBar progressBar;
     private TextView emptyListView;
-
-    //Galaxy WearOS Bluetooth
-    private final BluetoothChat BC = new BluetoothChat();
-
-    private boolean HasBTPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
-
-    private void RequestBTPermission() {
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
-                return;
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 2: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    BC.onCreate(getApplicationContext());
-                    BC.onStart(getApplicationContext());
-                    Toast.makeText(getApplicationContext(), "BT activated", Toast.LENGTH_SHORT).show();
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    settings.setWearOsBluetooth(false);
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
 
     // QR code scanning
     private void scanQRCode(){
@@ -421,21 +371,6 @@ public class MainActivity extends BaseActivity
 
         if (settings.isFocusSearchOnStartEnabled())
             focusSearchMenu();
-
-        //Galaxy WearOS Bluetooth
-        if (BuildConfig.FLAVOR.equals("galaxy")) {
-            if (settings.getWearOsBluetooth()) {
-                if (HasBTPermission()) {
-                    BC.onCreate(getApplicationContext());
-                    BC.onStart(getApplicationContext());
-                }
-                else RequestBTPermission();
-                //if (!HasBTPermission()) {
-                //    settings.setWearOsBluetooth(false);
-                //}
-                //else settings.setWearOsBluetooth(false);
-            }
-        }
     }
 
     private void checkIntent() {
@@ -518,17 +453,6 @@ public class MainActivity extends BaseActivity
             cardList.setVisibility(View.VISIBLE);
 
         startUpdater();
-
-        //Galaxy WearOS Bluetooth
-        if (BuildConfig.FLAVOR.equals("galaxy")) {
-            if (settings.getWearOsBluetooth()) {
-//                RequestBTPermission();
-                if (HasBTPermission()) {
-                    BC.onResume();
-                }
-                //else settings.setWearOsBluetooth(false);
-            }
-        }
     }
 
     @Override
@@ -547,7 +471,7 @@ public class MainActivity extends BaseActivity
         super.onSaveInstanceState(outState);
         outState.putString("filterString", filterString);
 
-        if (cacheEncKey && adapter.getEncryptionKey() != null) {
+        if (cacheEncKey) {
             outState.putByteArray("encKey", adapter.getEncryptionKey().getEncoded());
             cacheEncKey = false;
         }
@@ -575,21 +499,6 @@ public class MainActivity extends BaseActivity
                 key.equals(getString(R.string.settings_key_hide_issuer)) ||
                 key.equals(getString(R.string.settings_key_show_prev_token))) {
             recreateActivity = true;
-        }
-        else if (key.equals(getString(R.string.settings_key_galaxy_wearos_sync))) {
-            if (settings.getWearOsBluetooth()) {
-                if (HasBTPermission()) {
-                    BC.onCreate(getApplicationContext());
-                    BC.onStart(getApplicationContext());
-                    BC.onResume();
-                    Toast.makeText(getApplicationContext(), "BT activated", Toast.LENGTH_SHORT).show();
-                }
-                else RequestBTPermission();
-            }
-            else {
-                Toast.makeText(getApplicationContext(), "BT deactivated", Toast.LENGTH_SHORT).show();
-                BC.onDestroy();
-            }
         }
     }
 
@@ -782,9 +691,7 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.action_backup) {
             Intent backupIntent = new Intent(this, BackupActivity.class);
-            if (adapter.getEncryptionKey() != null) {
-                backupIntent.putExtra(Constants.EXTRA_BACKUP_ENCRYPTION_KEY, adapter.getEncryptionKey().getEncoded());
-            }
+            backupIntent.putExtra(Constants.EXTRA_BACKUP_ENCRYPTION_KEY, adapter.getEncryptionKey().getEncoded());
             startActivityForResult(backupIntent, Constants.INTENT_MAIN_BACKUP);
         } else if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);

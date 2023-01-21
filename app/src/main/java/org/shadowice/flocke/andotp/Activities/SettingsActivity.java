@@ -22,11 +22,8 @@
 
 package org.shadowice.flocke.andotp.Activities;
 
-import static org.shadowice.flocke.andotp.Utilities.Constants.AuthMethod;
-import static org.shadowice.flocke.andotp.Utilities.Constants.EncryptionType;
-
-import android.app.AlertDialog;
 import android.app.backup.BackupManager;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -39,12 +36,13 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.provider.DocumentsContract;
-import android.util.Log;
-import android.view.ViewStub;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+
+import android.provider.DocumentsContract;
+import android.util.Log;
+import android.view.ViewStub;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -65,6 +63,9 @@ import org.shadowice.flocke.andotp.Utilities.UIHelper;
 import java.util.Locale;
 
 import javax.crypto.SecretKey;
+
+import static org.shadowice.flocke.andotp.Utilities.Constants.AuthMethod;
+import static org.shadowice.flocke.andotp.Utilities.Constants.EncryptionType;
 
 public class SettingsActivity extends BackgroundTaskActivity<ChangeEncryptionTask.Result>
         implements SharedPreferences.OnSharedPreferenceChangeListener, EncryptionHelper.EncryptionChangeCallback {
@@ -122,9 +123,7 @@ public class SettingsActivity extends BackgroundTaskActivity<ChangeEncryptionTas
         super.onSaveInstanceState(outState);
 
         outState.putBoolean(Constants.EXTRA_SETTINGS_ENCRYPTION_CHANGED, encryptionChanged);
-        if (encryptionKey != null) {
-            outState.putByteArray(Constants.EXTRA_SETTINGS_ENCRYPTION_KEY, encryptionKey.getEncoded());
-        }
+        outState.putByteArray(Constants.EXTRA_SETTINGS_ENCRYPTION_KEY, encryptionKey.getEncoded());
     }
 
     public void finishWithResult() {

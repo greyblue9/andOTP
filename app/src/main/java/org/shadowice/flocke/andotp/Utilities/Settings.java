@@ -680,32 +680,4 @@ public class Settings {
     public boolean getShowPrevToken() {
         return getBoolean(R.string.settings_key_show_prev_token, false);
     }
-
-    //added method to directly set the enc auto backup password //galaxy
-    public void setAutoBackupGalaxyPassword(String password) {
-        String plainPassword = password;
-
-        try {
-            KeyPair key = KeyStoreHelper.loadOrGenerateAsymmetricKeyPair(context, Constants.KEYSTORE_ALIAS_PASSWORD);
-
-            if (key != null) {
-                byte[] encPassword = EncryptionHelper.encrypt(key.getPublic(), plainPassword.getBytes(StandardCharsets.UTF_8));
-
-                setString(R.string.settings_key_backup_password_enc, Base64.encodeToString(encPassword, Base64.URL_SAFE));
-
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // added entry and method to set / get GW4 WearOs Bluetooth Sync Mode
-    public void setWearOsBluetooth (Boolean WearOS) {
-        setBoolean(R.string.settings_key_galaxy_wearos_sync, WearOS);
-    }
-
-    public boolean getWearOsBluetooth () {
-        return getBoolean(R.string.settings_key_galaxy_wearos_sync, false);
-    }
 }
