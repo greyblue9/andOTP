@@ -56,7 +56,7 @@ android {
 }
 
 dependencies {
-    // def lifecycle_version = "2.5.1"
+    def lifecycle_version = "2.5.1"
 
     implementation 'androidx.media:media:1.6.0'
     implementation 'androidx.legacy:legacy-supportv4:1.0.0'
